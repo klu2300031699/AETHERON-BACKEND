@@ -69,12 +69,21 @@ public class CommunityController {
     
     // Upload attachment (simplified version - stores base64 in message)
     @PostMapping("/attachments")
-    public ResponseEntity<CommunityAttachment> uploadAttachment(@RequestBody CommunityAttachment attachment) {
+    public ResponseEntity<?> uploadAttachment(@RequestBody CommunityAttachment attachment) {
         try {
             System.out.println("Received attachment upload request for message ID: " + attachment.getMessageId());
             System.out.println("File name: " + attachment.getFileName());
             System.out.println("File type: " + attachment.getFileType());
             System.out.println("File size: " + attachment.getFileSize());
+            System.out.println("Has file path: " + (attachment.getFilePath() != null && !attachment.getFilePath().isEmpty()));
+            System.out.println("Has file URL: " + (attachment.getFileUrl() != null && !attachment.getFileUrl().isEmpty()));
+            
+            if (attachment.getMessageId() == null) {
+                System.err.println("ERROR: message_id is null");
+                Map<String, String> error = new HashMap<>();
+                error.put("error", "message_id cannot be null");
+                return ResponseEntity.badRequest().body(error);
+            }
             
             CommunityAttachment savedAttachment = communityService.addAttachment(attachment);
             System.out.println("Attachment saved successfully with ID: " + savedAttachment.getId());
@@ -82,7 +91,10 @@ public class CommunityController {
         } catch (Exception e) {
             System.err.println("Error saving attachment: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            error.put("type", e.getClass().getSimpleName());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
     
