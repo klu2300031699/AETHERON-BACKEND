@@ -1,18 +1,10 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,41 +16,6 @@ public class CourseDetailController {
     @Autowired
     private CourseDetailService courseDetailService;
     
-    @PostMapping("/upload-course-by-pdf")
-    public ResponseEntity<?> upload(@RequestParam MultipartFile file) {
-
-        try {
-            Path uploadDir = Paths.get("uploads");
-            if (!Files.exists(uploadDir)) {
-                Files.createDirectories(uploadDir);   // 👈 THIS fixes your error
-            }
-
-            Path path = uploadDir.resolve(file.getOriginalFilename());
-            Files.write(path, file.getBytes());
-
-            RestTemplate rest = new RestTemplate();
-
-            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            body.add("file", new FileSystemResource(path.toFile()));
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
-
-            String json = rest.postForObject(
-                    "https://py-service-61q5.onrender.com/parse-pdf",
-                    request,
-                    String.class
-            );
-
-            return ResponseEntity.ok(json);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("PDF parsing failed");
-        }
-    }
     // Get all course details
     @GetMapping("/all")
     public ResponseEntity<List<CourseDetail>> getAllCourseDetails() {
