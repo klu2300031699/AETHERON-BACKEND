@@ -20,6 +20,11 @@ public class CommunityService {
         return messageRepository.findByCourseIdOrderByCreatedAtAsc(courseId);
     }
     
+    // Get a single message by ID
+    public CommunityMessage getMessageById(Long messageId) {
+        return messageRepository.findById(messageId).orElse(null);
+    }
+    
     // Get message count for a course
     public long getMessageCountByCourseId(Long courseId) {
         return messageRepository.countByCourseId(courseId);

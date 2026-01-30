@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -32,6 +33,7 @@ public class CommunityMessage {
     @Column(name = "message_type", nullable = false)
     private String messageType = "TEXT"; // TEXT, IMAGE, FILE
 
+    @JsonIgnore
     @Column(name = "file_data", columnDefinition = "MEDIUMBLOB")
     @Lob
     private byte[] data;

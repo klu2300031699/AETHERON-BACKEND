@@ -117,4 +117,29 @@ public class CommunityController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    // Get file data for a message
+    @GetMapping("/messages/{messageId}/file")
+    public ResponseEntity<byte[]> getMessageFile(@PathVariable Long messageId) {
+        try {
+            CommunityMessage message = communityService.getMessageById(messageId);
+            if (message == null || message.getData() == null) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            if (message.getFiletype() != null) {
+                headers.setContentType(org.springframework.http.MediaType.parseMediaType(message.getFiletype()));
+            }
+            if (message.getFilename() != null) {
+                headers.setContentDispositionFormData("attachment", message.getFilename());
+            }
+            
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(message.getData());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
