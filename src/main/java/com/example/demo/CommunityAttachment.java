@@ -23,6 +23,9 @@ public class CommunityAttachment {
     @Column(name = "file_path", columnDefinition = "LONGTEXT")
     private String filePath;
     
+    @Column(name = "file_url", columnDefinition = "LONGTEXT")
+    private String fileUrl;
+    
     @Column(name = "file_size")
     private Long fileSize;
     
@@ -73,6 +76,14 @@ public class CommunityAttachment {
     
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+    
+    public String getFileUrl() {
+        return fileUrl;
+    }
+    
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
     
     public Long getFileSize() {

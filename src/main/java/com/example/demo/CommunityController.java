@@ -71,9 +71,17 @@ public class CommunityController {
     @PostMapping("/attachments")
     public ResponseEntity<CommunityAttachment> uploadAttachment(@RequestBody CommunityAttachment attachment) {
         try {
+            System.out.println("Received attachment upload request for message ID: " + attachment.getMessageId());
+            System.out.println("File name: " + attachment.getFileName());
+            System.out.println("File type: " + attachment.getFileType());
+            System.out.println("File size: " + attachment.getFileSize());
+            
             CommunityAttachment savedAttachment = communityService.addAttachment(attachment);
+            System.out.println("Attachment saved successfully with ID: " + savedAttachment.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(savedAttachment);
         } catch (Exception e) {
+            System.err.println("Error saving attachment: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
