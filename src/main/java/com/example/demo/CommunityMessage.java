@@ -23,7 +23,7 @@ public class CommunityMessage {
     @Column(name = "user_name", nullable = false)
     private String userName;
     
-    @Column(name = "message_text", columnDefinition = "TEXT")
+    @Column(name = "message", columnDefinition = "TEXT")
     private String messageText;
     
     @Column(name = "message_type", nullable = false)
