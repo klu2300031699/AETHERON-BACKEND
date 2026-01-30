@@ -14,10 +14,10 @@ public class CommunityAttachment {
     @Column(name = "message_id", nullable = false)
     private Long messageId;
     
-    @Column(name = "file_name", nullable = false)
+    @Column(name = "file_name")
     private String fileName;
     
-    @Column(name = "file_type", nullable = false)
+    @Column(name = "file_type")
     private String fileType;
     
     @Column(name = "file_path", columnDefinition = "LONGTEXT")
@@ -29,7 +29,7 @@ public class CommunityAttachment {
     @Column(name = "file_size")
     private Long fileSize;
     
-    @Column(name = "uploaded_at", nullable = false)
+    @Column(name = "uploaded_at")
     private LocalDateTime uploadedAt;
     
     // Default constructor
