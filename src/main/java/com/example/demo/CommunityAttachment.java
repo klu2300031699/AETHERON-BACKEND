@@ -14,22 +14,19 @@ public class CommunityAttachment {
     @Column(name = "message_id", nullable = false)
     private Long messageId;
     
-    @Column(name = "file_name")
+    @Column(name = "file_name", nullable = false)
     private String fileName;
     
-    @Column(name = "file_type")
+    @Column(name = "file_type", nullable = false)
     private String fileType;
     
-    @Column(name = "file_path", columnDefinition = "LONGTEXT")
-    private String filePath;
-    
-    @Column(name = "file_url", columnDefinition = "LONGTEXT")
+    @Column(name = "file_url", nullable = false, length = 1000)
     private String fileUrl;
     
     @Column(name = "file_size")
     private Long fileSize;
     
-    @Column(name = "uploaded_at")
+    @Column(name = "uploaded_at", nullable = false)
     private LocalDateTime uploadedAt;
     
     // Default constructor
@@ -68,14 +65,6 @@ public class CommunityAttachment {
     
     public void setFileType(String fileType) {
         this.fileType = fileType;
-    }
-    
-    public String getFilePath() {
-        return filePath;
-    }
-    
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
     
     public String getFileUrl() {

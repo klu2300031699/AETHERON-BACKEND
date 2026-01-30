@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +44,36 @@ public class CommunityController {
     
     // Create a new message
     @PostMapping("/messages")
-    public ResponseEntity<CommunityMessage> createMessage(@RequestBody CommunityMessage message) {
+    public ResponseEntity<CommunityMessage> createMessage(
+            @RequestParam("courseId") Long courseId,
+            @RequestParam("courseTitle") String courseTitle,
+            @RequestParam("userId") Long userId,
+            @RequestParam("userName") String userName,
+            @RequestParam("userEmail") String userEmail,
+            @RequestParam("messageText") String messageText,
+            @RequestParam("messageType") String messageType,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
+            CommunityMessage message = new CommunityMessage();
+            message.setCourseId(courseId);
+            message.setCourseTitle(courseTitle);
+            message.setUserId(userId);
+            message.setUserName(userName);
+            message.setUserEmail(userEmail);
+            message.setMessageText(messageText);
+            message.setMessageType(messageType);
+            
+            // Handle file upload if present
+            if (file != null && !file.isEmpty()) {
+                String filename = file.getOriginalFilename();
+                String filetype = file.getContentType();
+                byte[] data = file.getBytes();
+                
+                message.setFilename(filename);
+                message.setFiletype(filetype);
+                message.setData(data);
+            }
+            
             CommunityMessage savedMessage = communityService.createMessage(message);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedMessage);
         } catch (Exception e) {
@@ -69,32 +98,12 @@ public class CommunityController {
     
     // Upload attachment (simplified version - stores base64 in message)
     @PostMapping("/attachments")
-    public ResponseEntity<?> uploadAttachment(@RequestBody CommunityAttachment attachment) {
+    public ResponseEntity<CommunityAttachment> uploadAttachment(@RequestBody CommunityAttachment attachment) {
         try {
-            System.out.println("Received attachment upload request for message ID: " + attachment.getMessageId());
-            System.out.println("File name: " + attachment.getFileName());
-            System.out.println("File type: " + attachment.getFileType());
-            System.out.println("File size: " + attachment.getFileSize());
-            System.out.println("Has file path: " + (attachment.getFilePath() != null && !attachment.getFilePath().isEmpty()));
-            System.out.println("Has file URL: " + (attachment.getFileUrl() != null && !attachment.getFileUrl().isEmpty()));
-            
-            if (attachment.getMessageId() == null) {
-                System.err.println("ERROR: message_id is null");
-                Map<String, String> error = new HashMap<>();
-                error.put("error", "message_id cannot be null");
-                return ResponseEntity.badRequest().body(error);
-            }
-            
             CommunityAttachment savedAttachment = communityService.addAttachment(attachment);
-            System.out.println("Attachment saved successfully with ID: " + savedAttachment.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(savedAttachment);
         } catch (Exception e) {
-            System.err.println("Error saving attachment: " + e.getMessage());
-            e.printStackTrace();
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            error.put("type", e.getClass().getSimpleName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     

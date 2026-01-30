@@ -31,6 +31,16 @@ public class CommunityMessage {
     
     @Column(name = "message_type", nullable = false)
     private String messageType = "TEXT"; // TEXT, IMAGE, FILE
+
+    @Column(name = "file_data", columnDefinition = "MEDIUMBLOB")
+    @Lob
+    private byte[] data;
+    
+    @Column(name = "filename")
+    private String filename;
+    
+    @Column(name = "filetype")
+    private String filetype;
     
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -107,6 +117,30 @@ public class CommunityMessage {
     
     public void setMessageType(String messageType) {
         this.messageType = messageType;
+    }
+    
+    public byte[] getData() {
+        return data;
+    }
+    
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+    
+    public String getFilename() {
+        return filename;
+    }
+    
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+    
+    public String getFiletype() {
+        return filetype;
+    }
+    
+    public void setFiletype(String filetype) {
+        this.filetype = filetype;
     }
     
     public LocalDateTime getCreatedAt() {
