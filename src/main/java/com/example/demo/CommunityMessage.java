@@ -32,9 +32,13 @@ public class CommunityMessage {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
     
+    @Column(name = "sent_at", nullable = false)
+    private LocalDateTime sentAt;
+    
     // Default constructor
     public CommunityMessage() {
         this.createdAt = LocalDateTime.now();
+        this.sentAt = LocalDateTime.now();
     }
     
     // Getters and Setters
@@ -100,5 +104,13 @@ public class CommunityMessage {
     
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+    
+    public LocalDateTime getSentAt() {
+        return sentAt;
+    }
+    
+    public void setSentAt(LocalDateTime sentAt) {
+        this.sentAt = sentAt;
     }
 }
