@@ -23,6 +23,9 @@ public class CommunityMessage {
     @Column(name = "user_name", nullable = false)
     private String userName;
     
+    @Column(name = "user_email", nullable = false)
+    private String userEmail;
+    
     @Column(name = "message", columnDefinition = "TEXT")
     private String messageText;
     
@@ -80,6 +83,14 @@ public class CommunityMessage {
     
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+    
+    public String getUserEmail() {
+        return userEmail;
+    }
+    
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
     
     public String getMessageText() {
